@@ -137,7 +137,7 @@ function nfeio_output($vars) {
 		
 		echo '<tr>';
 		echo '<td><a href="invoices.php?action=edit&id='.$row['fatura'].'" target="blank">#'.$row['fatura'].'</a></td>';
-		echo '<td><center><a href="'.$vars['modulelink'].'&download='.$row['nf'].'&fatura='.$row['fatura'].'" target="blank">'.$row['nf'].'</a></center></td>';
+		echo '<td><center><a href="'.$vars['modulelink'].'&download='.$row['nf'].'&fatura='.$row['fatura'].'">'.$row['nf'].'</a></center></td>';
 		echo '<td><center>'.date('d/m/Y', strtotime($row['emissao'])).'</center></td>';
 		echo '<td><a href="clientssummary.php?userid='.$row['cliente_id'].'" target="blank">'.$row['nome'].' '.$row['sobrenome'].'</a></td>';
 		echo '<td><center>'.number_format($row['valor'], 2, ',', '.').'</center></td>';
