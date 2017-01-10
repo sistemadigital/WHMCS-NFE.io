@@ -51,6 +51,7 @@ function nfeio_output($vars) {
 		while($row_itens = mysql_fetch_array($sql_itens)){
 			$descricao .= $row_itens['description'].": ".str_replace(".", ",", $row_itens['amount'])." | ";
 		}
+		$descricao = trim($descricao, " | ");
 		
 		$sql_doc = mysql_query("SELECT v.value AS cpf_cnpj FROM tblcustomfields f, tblcustomfieldsvalues v WHERE f.id = v.fieldid AND f.type='client' AND f.fieldname='CPF/CNPJ' AND v.relid='".$row['cliente_id']."'");
 		$row_doc = mysql_fetch_array($sql_doc);
