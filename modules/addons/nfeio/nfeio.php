@@ -19,7 +19,7 @@ function nfeio_config() {
 
 function nfeio_activate() {
 
-	$query = "CREATE TABLE `mod_nfeio` (`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `cliente` int(11) NOT NULL, `fatura` int(11) NOT NULL, `nf` varchar(255) NOT NULL, `emissao` date NOT NULL, `valor` decimal(10,2) NOT NULL, `status` varchar(255) NOT NULL, `pdf` text NOT NULL, `retorno` text NOT NULL, `msg` text NOT NULL)";
+	$query = "CREATE TABLE `mod_nfeio` (`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `cliente` int(11) NOT NULL, `fatura` int(11) NOT NULL, `nf` varchar(255) NOT NULL, `emissao` date NOT NULL, `valor` decimal(10,2) NOT NULL, `status` varchar(255) NOT NULL, `retorno` text NOT NULL, `msg` text NOT NULL)";
     $result = full_query($query);
 
     return array('status'=>'success','description'=>'Addon instalado com sucesso!');
