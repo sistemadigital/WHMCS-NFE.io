@@ -46,10 +46,10 @@ function nfeio_output($vars) {
 		$sql = mysql_query("SELECT i.id AS id, i.total AS total, c.id AS cliente_id, c.firstname AS firstname, c.lastname AS lastname, c.email AS email, c.country AS country, c.postcode AS postcode, c.address1 AS address1, c.address2 AS address2, c.city AS city, c.state AS state FROM tblinvoices i, tblclients c WHERE i.userid = c.id AND i.id = '".$_GET['reemitir']."'");
 		$row = mysql_fetch_array($sql);
 		
-		$sql_itens = mysql_query("SELECT DISTINCT(description) AS description FROM tblinvoiceitems WHERE invoiceid = '".$row['id']."'");
+		$sql_itens = mysql_query("SELECT COUNT(description) AS qnt, description FROM tblinvoiceitems WHERE invoiceid = '".$row['id']."' GROUP BY description");
 		$descricao = "";
 		while($row_itens = mysql_fetch_array($sql_itens)){
-			$descricao .= $row_itens['description'].", ";
+			$descricao .= $row_itens['qnt']"x ".$row_itens['description'].", ";
 		}
 		$descricao = trim($descricao, ", ");
 		
