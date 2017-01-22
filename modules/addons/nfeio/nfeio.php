@@ -49,7 +49,7 @@ function nfeio_output($vars) {
 		$sql_itens = mysql_query("SELECT COUNT(description) AS qnt, description FROM tblinvoiceitems WHERE invoiceid = '".$row['id']."' GROUP BY description");
 		$descricao = "";
 		while($row_itens = mysql_fetch_array($sql_itens)){
-			$descricao .= $row_itens['qnt']"x ".$row_itens['description'].", ";
+			$descricao .= $row_itens['qnt']."x ".$row_itens['description'].", ";
 		}
 		$descricao = trim($descricao, ", ");
 		
