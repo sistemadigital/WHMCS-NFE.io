@@ -115,7 +115,7 @@ function nfeio_output($vars) {
 	
 	echo '<table id="sortabletbl0" class="datatable" width="100%" border="0" cellspacing="1" cellpadding="3"><tr><th>Fatura</th><th>Nota Fiscal</th><th>Data da emissão</th><th>Tomador</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>';
 	
-	$sql = mysql_query("SELECT m.fatura AS fatura, m.nf AS nf, m.pdf AS pdf, m.retorno AS retorno, m.emissao AS emissao, m.valor AS valor, m.status AS status, c.id AS cliente_id, c.firstname AS nome, c.lastname AS sobrenome FROM mod_nfeio m, tblclients c WHERE m.cliente = c.id ORDER BY m.id DESC");
+	$sql = mysql_query("SELECT m.fatura AS fatura, m.nf AS nf, m.retorno AS retorno, m.emissao AS emissao, m.valor AS valor, m.status AS status, c.id AS cliente_id, c.firstname AS nome, c.lastname AS sobrenome FROM mod_nfeio m, tblclients c WHERE m.cliente = c.id ORDER BY m.id DESC");
 	while($row = mysql_fetch_array($sql)){
 
 		if($row['status'] == "Issued"):
