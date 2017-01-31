@@ -21,56 +21,79 @@ add_hook('InvoicePaid', 1, function($vars){
 	$sql = mysql_query("SELECT i.id AS id, i.total AS total, c.id AS cliente_id, c.firstname AS firstname, c.lastname AS lastname, c.email AS email, c.country AS country, c.postcode AS postcode, c.address1 AS address1, c.address2 AS address2, c.city AS city, c.state AS state FROM tblinvoices i, tblclients c WHERE i.userid = c.id AND i.id = '".$vars['invoiceid']."'");
 	$row = mysql_fetch_array($sql);
 	
-	$sql_itens = mysql_query("SELECT COUNT(description) AS qnt, description FROM tblinvoiceitems WHERE invoiceid = '".$row['id']."' GROUP BY description");
-	$descricao = "";
-	while($row_itens = mysql_fetch_array($sql_itens)){
-		$descricao .= $row_itens['qnt']."x ".$row_itens['description'].", ";
-	}
-	$descricao = trim($descricao, ", ");
-	
-	$sql_doc = mysql_query("SELECT v.value AS cpf_cnpj FROM tblcustomfields f, tblcustomfieldsvalues v WHERE f.id = v.fieldid AND f.type='client' AND f.fieldname='CPF/CNPJ' AND v.relid='".$row['cliente_id']."'");
-	$row_doc = mysql_fetch_array($sql_doc);
-	
-	$sql_numero = mysql_query("SELECT v.value AS numero FROM tblcustomfields f INNER JOIN tblcustomfieldsvalues v ON f.id = v.fieldid WHERE f.type='client' AND f.fieldname='Número' AND v.relid='".$row['cliente_id']."'");
-	$row_numero = mysql_fetch_array($sql_numero);
+	if($row['total'] != "0.00"):
+		$sql_itens = mysql_query("SELECT COUNT(description) AS qnt, description FROM tblinvoiceitems WHERE invoiceid = '".$row['id']."' GROUP BY description");
+		$descricao = "";
+		while($row_itens = mysql_fetch_array($sql_itens)){
+			$descricao .= $row_itens['qnt']."x ".$row_itens['description'].", ";
+		}
+		$descricao = trim($descricao, ", ");
 		
-	$json = file_get_contents("http://api.modulosprontos.com.br/cep/".$row['postcode']);
-	$obj = json_decode($json);
-	
-	NFe::setApiKey($chaveAPI);
-	
-	$gerarNF = NFe_ServiceInvoice::create(
-		$empresaID,
-		array(
-			'cityServiceCode' => $cityServiceCode,
-			'description'     => $descricao,
-			'servicesAmount'  => $row['total'],
-			'borrower' => array(
-				'federalTaxNumber' => preg_replace("/[^0-9]/", "", $row_doc['cpf_cnpj']),
-				'name'             => $row['firstname']." ".$row['lastname'],
-				'email'            => $row['email'],
-				'address'          => array(
-					'country'               => $country[$row['country']],
-					'postalCode'            => $row['postcode'],
-					'street'                => $row['address1'],
-					'number'                => $row_numero['numero'],
-					'additionalInformation' => "",
-					'district'              => $row['address2'],
-					'city' => array(
-						'code' => $obj->ibge,
-						'name' => $row['city']
-					),
-					'state' => $row['state']
+		$sql_doc = mysql_query("SELECT v.value AS cpf_cnpj FROM tblcustomfields f, tblcustomfieldsvalues v WHERE f.id = v.fieldid AND f.type='client' AND f.fieldname='CPF/CNPJ' AND v.relid='".$row['cliente_id']."'");
+		$row_doc = mysql_fetch_array($sql_doc);
+		
+		$sql_numero = mysql_query("SELECT v.value AS numero FROM tblcustomfields f INNER JOIN tblcustomfieldsvalues v ON f.id = v.fieldid WHERE f.type='client' AND f.fieldname='Número' AND v.relid='".$row['cliente_id']."'");
+		$row_numero = mysql_fetch_array($sql_numero);
+			
+		$json = file_get_contents("http://api.modulosprontos.com.br/cep/".$row['postcode']);
+		$obj = json_decode($json);
+		
+		NFe::setApiKey($chaveAPI);
+		
+		$gerarNF = NFe_ServiceInvoice::create(
+			$empresaID,
+			array(
+				'cityServiceCode' => $cityServiceCode,
+				'description'     => $descricao,
+				'servicesAmount'  => $row['total'],
+				'borrower' => array(
+					'federalTaxNumber' => preg_replace("/[^0-9]/", "", $row_doc['cpf_cnpj']),
+					'name'             => $row['firstname']." ".$row['lastname'],
+					'email'            => $row['email'],
+					'address'          => array(
+						'country'               => $country[$row['country']],
+						'postalCode'            => $row['postcode'],
+						'street'                => $row['address1'],
+						'number'                => $row_numero['numero'],
+						'additionalInformation' => "",
+						'district'              => $row['address2'],
+						'city' => array(
+							'code' => $obj->ibge,
+							'name' => $row['city']
+						),
+						'state' => $row['state']
+					)
 				)
 			)
-		)
-	);
-	
-	if($gerarNF->status == "Created"):
-		$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->flowStatus}')";
-		$result = full_query($query);
-	else:
-		$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->message}')";
-		$result = full_query($query);
+		);
+		
+		if($gerarNF->status == "Created"):
+			$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->flowStatus}')";
+			$result = full_query($query);
+		else:
+			$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->message}')";
+			$result = full_query($query);
+		endif;
 	endif;
+						'street'                => $row['address1'],
+						'number'                => $row_numero['numero'],
+						'additionalInformation' => "",
+						'district'              => $row['address2'],
+						'city' => array(
+							'code' => $obj->ibge,
+							'name' => $row['city']
+						),
+						'state' => $row['state']
+					)
+				)
+			)
+		);
+
+		if($gerarNF->status == "Created"):
+			$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->flowStatus}')";
+			$result = full_query($query);
+		else:
+			$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->message}')";
+			$result = full_query($query);
+		endif;
 });
