@@ -75,25 +75,4 @@ add_hook('InvoicePaid', 1, function($vars){
 			$result = full_query($query);
 		endif;
 	endif;
-						'street'                => $row['address1'],
-						'number'                => $row_numero['numero'],
-						'additionalInformation' => "",
-						'district'              => $row['address2'],
-						'city' => array(
-							'code' => $obj->ibge,
-							'name' => $row['city']
-						),
-						'state' => $row['state']
-					)
-				)
-			)
-		);
-
-		if($gerarNF->status == "Created"):
-			$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->flowStatus}')";
-			$result = full_query($query);
-		else:
-			$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status) VALUES ('{$row['cliente_id']}', '{$row['id']}', '{$gerarNF->id}', NOW(), '{$row['total']}', '{$gerarNF->message}')";
-			$result = full_query($query);
-		endif;
 });
