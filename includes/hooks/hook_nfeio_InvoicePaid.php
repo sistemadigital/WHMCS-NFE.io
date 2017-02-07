@@ -35,7 +35,7 @@ add_hook('InvoicePaid', 1, function($vars){
 		$sql_numero = mysql_query("SELECT v.value AS numero FROM tblcustomfields f INNER JOIN tblcustomfieldsvalues v ON f.id = v.fieldid WHERE f.type='client' AND f.fieldname='Número' AND v.relid='".$row['cliente_id']."'");
 		$row_numero = mysql_fetch_array($sql_numero);
 			
-		$json = file_get_contents("http://api.modulosprontos.com.br/cep/".$row['postcode']);
+		$json = file_get_contents("http://open.nfe.io/v1/cities/".$row['postcode']."/postalcode");
 		$obj = json_decode($json);
 		
 		NFe::setApiKey($chaveAPI);
@@ -58,7 +58,7 @@ add_hook('InvoicePaid', 1, function($vars){
 						'additionalInformation' => "",
 						'district'              => $row['address2'],
 						'city' => array(
-							'code' => $obj->ibge,
+							'code' => $obj->city->code,
 							'name' => $row['city']
 						),
 						'state' => $row['state']
