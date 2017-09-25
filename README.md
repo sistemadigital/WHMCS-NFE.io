@@ -2,7 +2,12 @@
 
 ATENÇÃO: NÃO desative seu módulo em Opções -> Módulos Addon. Isso acarretará na remoção de todas as notas fiscais salvas em seu WHMCS.
 
-INSTALAÇÃO
+## Instalação
+- Incluir no php.ini as configurações
+```php
+    allow_url_fopen = ON
+    allow_url_include = ON
+```
 - Envie todas as pastas e documentos para a raiz do WHMCS.
 - Acesse o admin do WHMCS.
 - Entre em Opções -> Módulos Addon.
@@ -16,7 +21,7 @@ INSTALAÇÃO
 - Acesse o painel da NFe.io, clique em Conta, clique na aba Webhook localizado no submenu e em seguida Criar Webhook (https://app.nfe.io/hooks/new).
 - Em Endereço (URL) informe a URL de retorno do seu WHMCS (http://www.seu_whmcs.com.br/modules/addons/nfeio/webhook.php) substituindo www.seu_whmcs.com.br pelo endereço do seu WHMCS e clique em Salvar.
 
-ATUALIZAÇÃO
+## Atualização
 - Envie todas as pastas e documentos para a raiz do WHMCS substituindo os atuais.
 - Exclua do seu WHMCS alguns arquivos/pastas da versão anterior:
   /seu-whmcs/includes/hooks/lib
