@@ -9,7 +9,7 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 		$sql = mysql_query("SELECT i.id AS id, i.total AS total, c.id AS cliente_id, c.firstname AS firstname, c.lastname AS lastname, c.companyname AS companyname, c.email AS email, c.country AS country, c.postcode AS postcode, c.address1 AS address1, c.address2 AS address2, c.city AS city, c.state AS state FROM tblinvoices i, tblclients c WHERE i.userid = c.id AND i.id = '".$vars['invoiceid']."'");
 		$row = mysql_fetch_array($sql);
 		
-		if(nfeio_ValorCampo(nfeio_configModulo("input_emitir"), $row['cliente_id']) == "Boleto Gerado"){
+		if(nfeio_ValorCampo(nfeio_configModulo("input_emitir"), $row['cliente_id']) == "Fatura Gerada"){
 		
 			$sql = mysql_query("SELECT * FROM mod_nfeio WHERE fatura = '".$vars['invoiceid']."'");
 			if(mysql_num_rows($sql)){
@@ -19,8 +19,8 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 			if($row['total'] > "0.00"){
 				$descricao = str_replace("{fatura_id}", $row['id'], nfeio_configModulo("item_resumo"));
 				
-				if($row['companyname']){
-					$nome = $row['companyname'];
+				if($row['firstname']){
+					$nome = $row['firstname']." ".$row['lastname'];
 				}else{
 					$nome = $row['firstname']." ".$row['lastname'];
 				}
@@ -66,7 +66,7 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 		$sql = mysql_query("SELECT i.id AS id, i.total AS total, c.id AS cliente_id, c.firstname AS firstname, c.lastname AS lastname, c.companyname AS companyname, c.email AS email, c.country AS country, c.postcode AS postcode, c.address1 AS address1, c.address2 AS address2, c.city AS city, c.state AS state FROM tblinvoices i, tblclients c WHERE i.userid = c.id AND i.id = '".$vars['invoiceid']."'");
 		$row = mysql_fetch_array($sql);
 		
-		if(nfeio_ValorCampo(nfeio_configModulo("input_emitir"), $row['cliente_id']) == "Boleto Quitado"){
+		if(nfeio_ValorCampo(nfeio_configModulo("input_emitir"), $row['cliente_id']) == "Fatura Paga"){
 		
 			$sql = mysql_query("SELECT * FROM mod_nfeio WHERE fatura = '".$vars['invoiceid']."'");
 			if(mysql_num_rows($sql)){
