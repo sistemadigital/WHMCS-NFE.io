@@ -68,7 +68,7 @@ if($_GET['aba'] == "config"){
 			$query = "INSERT INTO `tblcustomfields` (`type`, `relid`, `fieldname`, `fieldtype`, `description`, `fieldoptions`, `regexpr`, `adminonly`, `required`, `showorder`, `showinvoice`, `sortorder`, `created_at`, `updated_at`) VALUES ('client', 0, 'Complemento', 'text', '', '', '', 'on', '', '', '', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00')";
 		}
 		if($_GET['input'] == "input_emitir"){
-			$query = "INSERT INTO `tblcustomfields` (`type`, `relid`, `fieldname`, `fieldtype`, `description`, `fieldoptions`, `regexpr`, `adminonly`, `required`, `showorder`, `showinvoice`, `sortorder`, `created_at`, `updated_at`) VALUES ('client', 0, 'Emitir Nota Fiscal', 'dropdown', '', 'Boleto Quitado,Boleto Gerado', '', 'on', '', '', '', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00')";
+			$query = "INSERT INTO `tblcustomfields` (`type`, `relid`, `fieldname`, `fieldtype`, `description`, `fieldoptions`, `regexpr`, `adminonly`, `required`, `showorder`, `showinvoice`, `sortorder`, `created_at`, `updated_at`) VALUES ('client', 0, 'Emitir Nota Fiscal', 'dropdown', '', 'Fatura Paga,Fatura Gerada', '', 'on', '', '', '', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00')";
 		}
 		
     	$result = mysql_query($query);
@@ -158,10 +158,10 @@ if($_GET['aba'] == "config"){
 		if($row['total'] > "0.00"){
 			$descricao = str_replace("{fatura_id}", $row['id'], nfeio_configModulo("item_resumo"));
 			
-			if($row['companyname']){
-				$nome = $row['companyname'];
-			}else{
+			if($row['firstname']){
 				$nome = $row['firstname']." ".$row['lastname'];
+			}else{
+				$nome = $row['companyname'];
 			}
 			
 			$dados = array(

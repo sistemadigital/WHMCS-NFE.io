@@ -22,7 +22,7 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 				if($row['firstname']){
 					$nome = $row['firstname']." ".$row['lastname'];
 				}else{
-					$nome = $row['firstname']." ".$row['lastname'];
+					$nome = $row['companyname'];
 				}
 				
 				$dados = array(
@@ -76,10 +76,10 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 			if($row['total'] > "0.00"){
 				$descricao = str_replace("{fatura_id}", $row['id'], nfeio_configModulo("item_resumo"));
 				
-				if($row['companyname']){
-					$nome = $row['companyname'];
-				}else{
+				if($row['firstname']){
 					$nome = $row['firstname']." ".$row['lastname'];
+				}else{
+					$nome = $row['companyname'];
 				}
 				
 				$dados = array(
