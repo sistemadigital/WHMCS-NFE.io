@@ -27,6 +27,6 @@ ATENÇÃO: NÃO desative seu módulo em Opções -> Módulos Addon. Isso acarret
   /seu-whmcs/includes/hooks/hook_nfeio_InvoicePaid.php
   /seu-whmcs/modules/widget/nfeio.php
 - Envie todas as pastas e documentos para a raiz do WHMCS substituindo os atuais.
-- Siga o mesmo procedimento explicado acima no item "Instalação".
+- Siga o mesmo procedimento explicado acima na instalação à partir do item "Acesse o admin do WHMCS..."
 
 Suporte: atendimento@sistema.digital
