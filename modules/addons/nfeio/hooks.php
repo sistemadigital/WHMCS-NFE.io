@@ -120,7 +120,7 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 		}
 	});
 
-	// add_hook('AfterCronJob', 1, function($vars) {
+	add_hook('AfterCronJob', 1, function($vars) {
 		$sql = mysql_query("SELECT * FROM mod_nfeio WHERE status != 'Issued' AND nf != '' OR status != 'Cancelled' AND nf != ''");
 		if(mysql_num_rows($sql)){
 			while($row = mysql_fetch_array($sql)){
@@ -132,5 +132,5 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 				}
 			}
 		}
-	// });
+	});
 }
