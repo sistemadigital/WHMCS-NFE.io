@@ -31,4 +31,4 @@ ATENÇÃO: NÃO desative seu módulo em Opções -> Módulos Addon. Isso acarret
 
 Suporte: atendimento@sistema.digital
 
-## Está disponível nosso novo fórum. Acesse e tire suas dúvidas.
+## Está disponível nosso novo fórum. Acesse e tire suas dúvidas: https://forum.sistema.digital/
