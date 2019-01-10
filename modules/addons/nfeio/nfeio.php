@@ -6,7 +6,7 @@ function nfeio_config() {
     $configarray = array(
 		"name" => "NFe.io (Gratuito)",
 		"description" => "Módulo gratuito de integração com a NFe.io",
-		"version" => "1.1",
+		"version" => "1.2",
 		"author" => "Sistema Digital",
 		"fields" => array(
 			"" => array ("Description" => "Que tal utilizar funções extras no módulo? Acesse <a href='http://sistema.digital/nfeio' target='blank'>sistema.digital/nfeio</a> para mais informações." ),
@@ -109,7 +109,7 @@ if($_GET['aba'] == "config"){
 	<table class="form" width="100%" border="0">
 		<tr>
 			<td class="fieldlabel">Ativar Módulo</td>
-			<td class="fieldarea"><label class="checkbox-inline"><input type="checkbox" <?php if(nfeio_configModulo('mod_ativo') == "on"){ echo "checked"; } ?> name="mod_ativo"> Marque a opção para ativar o uso do módulo.</label></td>
+			<td class="fieldarea"><label class="checkbox-inline"><input type="checkbox" <?php if(nfeio_configModulo('mod_ativo') == "on"){ echo "checked"; } ?> name="mod_ativo"> Marque a opção para ativar as funcionalidades do módulo.</label></td>
 		</tr>
 		<tr>
 			<td class="fieldlabel">Chave API</td>
@@ -151,6 +151,58 @@ if($_GET['aba'] == "config"){
 </form>
 <?php
 }else{
+	if($_GET['acao'] == "emitir"){
+		$sql = mysql_query("SELECT i.id AS id, i.total AS total, c.id AS cliente_id, c.firstname AS firstname, c.lastname AS lastname, c.companyname AS companyname, c.email AS email, c.country AS country, c.postcode AS postcode, c.address1 AS address1, c.address2 AS address2, c.city AS city, c.state AS state FROM tblinvoices i, tblclients c WHERE i.userid = c.id AND i.id = '".$_GET['cod']."'");
+		$row = mysql_fetch_array($sql);
+	
+		if($row['total'] > "0.00"){
+			$descricao = str_replace("{fatura_id}", $row['id'], nfeio_configModulo("item_resumo"));
+			
+			if($row['companyname']){
+				$nome = $row['companyname'];
+			}else{
+				$nome = $row['firstname']." ".$row['lastname'];
+			}
+			
+			$dados = array(
+				'cityServiceCode' => nfeio_configModulo("cityServiceCode"),
+				'description'     => $descricao,
+				'servicesAmount'  => $row['total'],
+				'borrower' => array(
+					'federalTaxNumber' => preg_replace("/[^0-9]/", "", nfeio_ValorCampo(nfeio_configModulo("input_doc"), $row['cliente_id'])),
+					'name'             => $nome,
+					'email'            => $row['email'],
+					'address'          => array(
+						'country'               => nfeio_SiglaPais($row['country']),
+						'postalCode'            => preg_replace("/[^0-9]/", "", $row['postcode']),
+						'street'                => $row['address1'],
+						'number'                => nfeio_ValorCampo(nfeio_configModulo("input_num"), $row['cliente_id']),
+						'additionalInformation' => nfeio_ValorCampo(nfeio_configModulo("input_complemento"), $row['cliente_id']),
+						'district'              => $row['address2'],
+						'city' => array(
+							'code' => nfeio_CodIBGE(preg_replace("/[^0-9]/", "", $row['postcode'])),
+							'name' => $row['city']
+						),
+						'state' => $row['state']
+					)
+				)
+			);
+				
+			$nfeio_emitirNF = nfeio_emitirNF($dados);
+			
+			if($nfeio_emitirNF->flowStatus){
+				$msgRetorno = $nfeio_emitirNF->flowStatus;
+			}else{
+				$msgRetorno = $nfeio_emitirNF->message;
+			}
+			
+			$query = "INSERT INTO mod_nfeio (cliente, fatura, nf, emissao, valor, status, retorno, msg) VALUES ('".$row['cliente_id']."', '".$row['id']."', '".$nfeio_emitirNF->id."', NOW(), '".$row['total']."', '".$nfeio_emitirNF->status."', '".serialize($nfeio_emitirNF)."', '".$msgRetorno."')";
+			$result = full_query($query);
+		}
+		
+		echo "<meta HTTP-EQUIV='Refresh' CONTENT='0;URL=".$vars['modulelink']."'>";
+	}
+	
 	if($_GET['acao'] == "reemitir"){
 		$sql = mysql_query("SELECT i.id AS id, i.total AS total, c.id AS cliente_id, c.firstname AS firstname, c.lastname AS lastname, c.companyname AS companyname, c.email AS email, c.country AS country, c.postcode AS postcode, c.address1 AS address1, c.address2 AS address2, c.city AS city, c.state AS state FROM tblinvoices i, tblclients c WHERE i.userid = c.id AND i.id = '".$_GET['cod']."'");
 		$row = mysql_fetch_array($sql);
