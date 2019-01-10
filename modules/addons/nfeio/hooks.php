@@ -119,6 +119,16 @@ if(nfeio_configModulo("mod_ativo") == "on"){
 			}
 		}
 	});
+	
+	add_hook('AdminInvoicesControlsOutput', 1, function($vars) {
+		$sql = mysql_query("SELECT * FROM mod_nfeio WHERE fatura = '".$vars['invoiceid']."'");
+		$row = mysql_fetch_array($sql);
+		if(!mysql_num_rows($sql)){
+			if($vars['total'] > "0.00"){
+				echo '<a alt="Emitir NF" title="Emitir NF" class="btn btn-sm btn-primary" href="addonmodules.php?module=nfeio&acao=emitir&cod='.$vars['invoiceid'].'">Emitir Nota Fiscal</a>&nbsp;';
+			}
+		}
+	});
 
 	add_hook('AfterCronJob', 1, function($vars) {
 		$sql = mysql_query("SELECT * FROM mod_nfeio WHERE status != 'Issued' AND nf != '' OR status != 'Cancelled' AND nf != ''");
