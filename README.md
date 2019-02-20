@@ -1,5 +1,7 @@
 # WHMCS-NFe.io
 
+### Conheça módulo NFE.io Plus com funcionalidades avançadas: https://sistema.digital/modulos-whmcs-nfeio.html
+
 ATENÇÃO: NÃO desative seu módulo em Opções -> Módulos Addon. Isso acarretará na remoção de todas as notas fiscais salvas em seu WHMCS.
 
 ## Instalação
@@ -30,5 +32,3 @@ ATENÇÃO: NÃO desative seu módulo em Opções -> Módulos Addon. Isso acarret
 - Siga o mesmo procedimento explicado acima na instalação à partir do item "Acesse o admin do WHMCS..."
 
 Suporte: atendimento@sistema.digital
-
-### Está disponível nosso novo fórum. Acesse e tire suas dúvidas: https://forum.sistema.digital/
