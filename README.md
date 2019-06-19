@@ -8,7 +8,6 @@ ATENÇÃO: NÃO desative seu módulo em Opções -> Módulos Addon. Isso acarret
 - Incluir no php.ini as configurações
 ```php
     allow_url_fopen = ON
-    allow_url_include = ON
 ```
 - Envie todas as pastas e documentos para a raiz do WHMCS.
 - Acesse o admin do WHMCS.
