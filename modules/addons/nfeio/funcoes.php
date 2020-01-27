@@ -25,13 +25,8 @@ function nfeio_ValorCampo($campo, $cliente){
 }
 
 function nfeio_CodIBGE($cep) {
-	$ch = curl_init();
-	curl_setopt ($ch, CURLOPT_URL, "http://open.nfe.io/v1/cities/".$cep."/postalcode");
-	curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	curl_setopt ($ch, CURLOPT_TIMEOUT, 30);
-	$res = curl_exec ($ch);
-	curl_close ($ch);
-	$obj = json_decode($res);
+	$json = file_get_contents("http://open.nfe.io/v1/cities/".$cep."/postalcode");
+	$obj = json_decode($json);
 	
 	return $obj->city->code;
 }
