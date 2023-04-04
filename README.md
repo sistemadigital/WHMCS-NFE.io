@@ -1,3 +1,5 @@
+<p align="center"><a href="https://www.buymeacoffee.com/lpcs007" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a></p>
+
 # WHMCS-NFe.io
 
 ### Conheça o módulo NFE.io Plus com funcionalidades avançadas: https://sistema.digital/modulos-whmcs-nfeio.html
